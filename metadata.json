@@ -1,0 +1,5 @@
+{
+  "name": "eBay Listing Generator AI",
+  "description": "Upload images of an item and let AI generate an optimized, mobile-friendly eBay listing, including a title, category, item specifics, and a compelling description to maximize visibility and sales.",
+  "requestFramePermissions": []
+}
