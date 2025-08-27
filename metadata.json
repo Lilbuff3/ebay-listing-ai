@@ -1,0 +1,27 @@
+{
+  "name": "eBay Listing Generator AI",
+  "version": "1.0.0",
+  "description": "AI-powered eBay listing generator using Google Gemini Vision",
+  "author": "Your Name",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/ebay-listing-ai"
+  },
+  "keywords": [
+    "ebay",
+    "ai",
+    "listing",
+    "google-gemini",
+    "image-recognition",
+    "e-commerce"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "deployment": {
+    "platform": "vercel",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist"
+  }
+}
