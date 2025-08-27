@@ -1,15 +1,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import formidable from 'formidable';
+import formidable, { IncomingForm } from 'formidable';
 import fs from 'fs';
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY || '');
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// Vercel configuration for file uploads
+export const runtime = 'nodejs18.x';
+export const maxDuration = 30;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -17,9 +15,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const form = formidable({ multiples: true });
+    const form = new IncomingForm({
+      multiples: true,
+      maxFiles: 10,
+      maxFileSize: 50 * 1024 * 1024, // 50MB
+    });
     
-    const [fields, files] = await form.parse(req);
+    const [fields, files] = await new Promise<[any, any]>((resolve, reject) => {
+      form.parse(req, (err, fields, files) => {
+        if (err) reject(err);
+        else resolve([fields, files]);
+      });
+    });
     
     const imageFiles = Object.values(files).flat().filter(Boolean);
     
