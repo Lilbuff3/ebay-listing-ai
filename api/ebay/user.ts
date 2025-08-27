@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getIronSession } from 'iron-session';
-import { sessionOptions } from '../../lib/session';
+import { getSession } from '../../lib/session';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
@@ -8,7 +7,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const session = await getIronSession(req, res, sessionOptions);
+    const session = await getSession(req, res);
     
     if (!session.ebayTokens?.access_token) {
       return res.status(401).json({ error: 'Not authenticated' });
@@ -42,9 +41,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     await session.save();
 
-    res.status(200).json(session.ebayUser);
+    return res.status(200).json(session.ebayUser);
   } catch (error) {
     console.error('Error fetching eBay user info:', error);
-    res.status(500).json({ error: 'Failed to fetch user info' });
+    return res.status(500).json({ error: 'Failed to fetch user info' });
   }
 }

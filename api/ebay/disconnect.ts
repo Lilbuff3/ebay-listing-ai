@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getIronSession } from 'iron-session';
-import { sessionOptions } from '../../lib/session';
+import { getSession } from '../../lib/session';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -8,7 +7,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const session = await getIronSession(req, res, sessionOptions);
+    const session = await getSession(req, res);
     
     // Clear eBay tokens from session
     session.ebayTokens = undefined;
@@ -16,9 +15,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     await session.save();
 
-    res.status(200).json({ success: true });
+    return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Error disconnecting from eBay:', error);
-    res.status(500).json({ error: 'Failed to disconnect from eBay' });
+    return res.status(500).json({ error: 'Failed to disconnect from eBay' });
   }
 }

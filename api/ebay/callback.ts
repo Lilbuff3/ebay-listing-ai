@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getIronSession } from 'iron-session';
-import { sessionOptions } from '../../lib/session';
+import { getSession } from '../../lib/session';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
@@ -8,7 +7,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const session = await getIronSession(req, res, sessionOptions);
+    const session = await getSession(req, res);
     const { code, error } = req.query;
 
     if (error) {
@@ -50,9 +49,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await session.save();
 
     // Redirect back to the main application
-    res.redirect('/?connected=true');
+    return res.redirect('/?connected=true');
   } catch (error) {
     console.error('OAuth callback error:', error);
-    res.redirect('/?error=oauth_failed');
+    return res.redirect('/?error=oauth_failed');
   }
 }

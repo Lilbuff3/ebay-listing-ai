@@ -5,9 +5,7 @@ import fs from 'fs';
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY || '');
 
-// Vercel configuration for file uploads
-export const runtime = 'nodejs18.x';
-export const maxDuration = 30;
+// Standard Vercel serverless function
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {

@@ -1,5 +1,7 @@
 import type { SessionOptions } from 'iron-session';
 import type { EbayTokens, EbayUser } from './ebay';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { getIronSession } from 'iron-session';
 
 export interface SessionData {
   ebayTokens?: EbayTokens;
@@ -16,6 +18,10 @@ export const sessionOptions: SessionOptions = {
     sameSite: 'lax',
   },
 };
+
+export async function getSession(req: VercelRequest, res: VercelResponse) {
+  return await getIronSession<SessionData>(req, res, sessionOptions);
+}
 
 declare module 'iron-session' {
   interface IronSessionData extends SessionData {}

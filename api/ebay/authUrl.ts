@@ -17,9 +17,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     const authUrl = `https://auth.ebay.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
     
-    res.status(200).json({ authUrl });
+    return res.status(200).json({ authUrl });
   } catch (error) {
     console.error('Error generating auth URL:', error);
-    res.status(500).json({ error: 'Failed to generate auth URL' });
+    return res.status(500).json({ error: 'Failed to generate auth URL' });
   }
 }
