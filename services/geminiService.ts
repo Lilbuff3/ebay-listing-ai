@@ -1,7 +1,7 @@
-import { GoogleGenerativeAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { ListingData } from '../types';
 
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
+const genAI = new GoogleGenerativeAI((import.meta as any).env?.VITE_GEMINI_API_KEY || '');
 
 export async function analyzeImagesForListing(imageFiles: File[]): Promise<ListingData> {
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
