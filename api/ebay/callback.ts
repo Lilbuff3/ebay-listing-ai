@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getSession } from '../../lib/session';
+import { getSession, saveTokensToDatabase } from '../../lib/session';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
@@ -45,6 +45,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       expires_in: tokenData.expires_in,
       token_type: tokenData.token_type
     };
+
+    // Save tokens to database for persistence
+    if (session.userId) {
+      await saveTokensToDatabase(session.userId, session.ebayTokens);
+    }
 
     await session.save();
 

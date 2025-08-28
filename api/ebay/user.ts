@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getSession } from '../../lib/session';
+import { getSession, updateUserEbayProfile } from '../../lib/session';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
@@ -38,6 +38,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       email: userData.email,
       registrationAddress: userData.registrationAddress
     };
+
+    // Save user profile to database
+    if (session.userId) {
+      await updateUserEbayProfile(session.userId, session.ebayUser);
+    }
 
     await session.save();
 
