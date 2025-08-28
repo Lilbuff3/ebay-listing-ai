@@ -2,6 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import ImageUploader from './components/ImageUploader';
 import ListingResult from './components/ListingResult';
 import Spinner from './components/Spinner';
+import { AccountDeletion } from './components/AccountDeletion';
+import { DataPolicy } from './components/DataPolicy';
 import { EbayIcon } from './icons/EbayIcon';
 import { SparklesIcon } from './icons/SparklesIcon';
 import type { ImageData, ListingData, EbayUser } from './types';
@@ -200,6 +202,21 @@ function App() {
               isConnected={!!ebayUser}
             />
           )}
+
+          {/* Data Policy and Account Deletion */}
+          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <DataPolicy />
+            
+            {ebayUser && (
+              <AccountDeletion 
+                onAccountDeleted={() => {
+                  setEbayUser(null);
+                  setListingData(null);
+                  setImages([]);
+                }}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

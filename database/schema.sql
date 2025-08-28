@@ -52,23 +52,11 @@ CREATE INDEX IF NOT EXISTS idx_ebay_tokens_expires_at ON ebay_tokens(expires_at)
 CREATE INDEX IF NOT EXISTS idx_ebay_listings_user_id ON ebay_listings(user_id);
 CREATE INDEX IF NOT EXISTS idx_ebay_listings_ebay_item_id ON ebay_listings(ebay_item_id);
 
--- Row Level Security (RLS)
-ALTER TABLE users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE ebay_tokens ENABLE ROW LEVEL SECURITY;
-ALTER TABLE ebay_listings ENABLE ROW LEVEL SECURITY;
-
--- RLS Policies
--- Users can only see their own data
-CREATE POLICY "Users can view own data" ON users FOR SELECT USING (auth.uid()::text = id::text);
-CREATE POLICY "Users can update own data" ON users FOR UPDATE USING (auth.uid()::text = id::text);
-
--- eBay tokens policies
-CREATE POLICY "Users can view own tokens" ON ebay_tokens FOR SELECT USING (auth.uid()::text = user_id::text);
-CREATE POLICY "Users can update own tokens" ON ebay_tokens FOR ALL USING (auth.uid()::text = user_id::text);
-
--- eBay listings policies  
-CREATE POLICY "Users can view own listings" ON ebay_listings FOR SELECT USING (auth.uid()::text = user_id::text);
-CREATE POLICY "Users can manage own listings" ON ebay_listings FOR ALL USING (auth.uid()::text = user_id::text);
+-- Row Level Security (RLS) - Disabled for session-based auth
+-- We're using session-based authentication instead of Supabase Auth
+-- ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE ebay_tokens ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE ebay_listings ENABLE ROW LEVEL SECURITY;
 
 -- Functions to update timestamps
 CREATE OR REPLACE FUNCTION update_updated_at_column()
